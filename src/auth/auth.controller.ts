@@ -1,17 +1,37 @@
 import { Controller, Post, Get, Request, UseGuards, Response, HttpException, HttpStatus,InternalServerErrorException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { ApiOperation, ApiBody, ApiResponse } from '@nestjs/swagger';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
-
+  
+  //Login API
   @Post('login')
+  @ApiOperation({ summary: 'Login to the application' })
+  @ApiBody({
+    description: 'The user login credentials',
+    type: LoginDto,
+  })
+  @ApiResponse({ status: 200, description: 'Login successful', schema: { type: 'object', properties: { auth_token: { type: 'string', example: 'jwt-token' }, message: { example:"Logged In successFully!!"} } } })
+  @ApiResponse({ status: 400, description: 'Invalid credentials' })
   async login(@Request() req, @Response() res) {
     return this.authService.login(req.body, res);
   }
+  //*********************//
+  //SignUp API
 
   @Post('register')
+  @ApiOperation({ summary: 'Signup in the application' })
+  @ApiBody({
+    description: 'The user registration data',
+    type: RegisterDto,
+  })
+  @ApiResponse({ status: 200, description: 'Singup successful', schema: { type: 'object', properties: { message: { type: 'string', example: 'Detials of the User' } } } })
+  @ApiResponse({ status: 400, description: 'User Already Exists' })
   async register(@Request() req) {
     const { emailId, password, role, userName} = req.body;
     if(!emailId || !password || !role || !userName) {
@@ -20,7 +40,7 @@ export class AuthController {
     return this.authService.register(emailId, password, role, userName);
     
   }
-
+  //******************//
   @UseGuards(JwtAuthGuard)
   @Get('logout')
   logout(@Request() req, @Response() res) {
