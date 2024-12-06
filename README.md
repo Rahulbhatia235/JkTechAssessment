@@ -1,7 +1,7 @@
 # User Authentication and Document Management Service
 
 ## Description
-This is a backend service built with **NestJS** to manage **user authentication**, **document management**, and **ingestion controls**. It provides features such as user registration, login, JWT-based authentication, document upload, metadata management, and ingestion control for document processing workflows.
+This is a backend service built with **NestJS** to manage **user authentication**, **document management**. It provides features such as user registration, login, JWT-based authentication, document upload.
 
 ## Features:
 - **User Authentication:**
@@ -12,7 +12,6 @@ This is a backend service built with **NestJS** to manage **user authentication*
   
 - **Document Management:**
   - Document upload (PDF, Word, etc.)
-  - Metadata storage (title, description, file type, etc.)
   - Document versioning
   - Document retrieval based on user permissions
 
