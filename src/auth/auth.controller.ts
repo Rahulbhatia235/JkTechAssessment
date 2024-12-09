@@ -19,7 +19,12 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Login successful', schema: { type: 'object', properties: { auth_token: { type: 'string', example: 'jwt-token' }, message: { example:"Logged In successFully!!"} } } })
   @ApiResponse({ status: 400, description: 'Invalid credentials' })
   async login(@Request() req, @Response() res) {
-    return this.authService.login(req.body, res);
+    try {
+      return await this.authService.login(req.body, res);
+    } catch(exception) {
+      throw new HttpException(`Error: ${exception.message}`, exception.status);
+    }
+    
   }
   //*********************//
   //SignUp API
@@ -43,6 +48,8 @@ export class AuthController {
   //******************//
   @UseGuards(JwtAuthGuard)
   @Get('logout')
+  @ApiOperation({ summary: 'Logout from the application' })
+  @ApiResponse({ status: 200, description: 'Logged out successfully'})
   logout(@Request() req, @Response() res) {
     // res.clearCookie('auth_token');
     // return res.send({ message: 'Logged out successfully' });
